@@ -1,0 +1,28 @@
+/* src/components/DocumentUpload.css */
+.document-upload {
+  margin-bottom: 10px;
+}
+
+.upload-icon-label {
+  display: inline-flex; /* Use flex to center the icon */
+  justify-content: center;
+  align-items: center;
+  padding: 8px; /* Adjust padding as needed */
+  background-color: #eee;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 50%; /* Make it circular */
+  cursor: pointer;
+  font-size: 1em; /* Adjust icon size if needed */
+  width: 36px; /* Ensure equal width */
+  height: 36px; /* Ensure equal height */
+}
+
+.upload-icon-label:hover {
+  background-color: #ddd;
+}
+
+/* Hide the default file input */
+#file-upload {
+  display: none;
+}

@@ -1,0 +1,173 @@
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 500px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+    width: 900px;
+  }
+  
+  .chat-history {
+    flex-grow: 1;
+    padding: 10px;
+    overflow-y: auto;
+  }
+  
+  .message {
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    clear: both;
+  }
+  
+  .user-message {
+    background-color: #e0f7fa;
+    align-self: flex-end;
+  }
+  
+  .assistant-message {
+    background-color: #f0f0f0;
+    align-self: flex-start;
+  }
+  
+  .message-content {
+    word-wrap: break-word;
+  }
+  
+  .chat-input-area {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+  }
+  
+  #user-input {
+    flex-grow: 1;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-right: 10px;
+  }
+  
+  #send-button {
+    padding: 8px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  #send-button:hover {
+    background-color: #0056b3;
+  }
+
+  .chat-header {
+    background-color: #f8f8f8;
+    color: #333;
+    padding: 15px;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .chat-header h2 {
+    margin: 0;
+    font-size: 1.5em;
+  }
+
+  .upload-notification {
+    padding: 8px;
+    margin: 0 10px 8px 10px; /* Add some spacing around the message */
+    background-color: #e9ecef; /* Light gray background */
+    color: #495057; /* Dark gray text */
+    border-radius: 5px;
+    font-size: 0.9em;
+    text-align: center;
+  }
+
+  /* Responsive adjustments for smaller screens */
+@media (max-width: 600px) {
+    .chat-container {
+      width: 100%; /* Take full width on smaller screens */
+      height: 100vh; /* Take full height on smaller screens */
+      border-radius: 0; /* Remove border radius */
+      border: none; /* Remove border */
+    }
+  
+    .chat-history {
+      padding: 10px;
+    }
+  
+    .chat-header {
+      padding: 10px;
+    }
+  
+    .chat-header h2 {
+      font-size: 1.2em;
+    }
+  
+    .chat-input-area {
+      padding: 8px;
+    }
+  
+    #user-input {
+      font-size: 1em;
+    }
+  
+    #send-button {
+      font-size: 1em;
+      padding: 8px 12px;
+    }
+  }
+
+  .chat-input-area {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+    align-items: center; /* Vertically align items in the input area */
+  }
+  
+  /* Adjust margin for the input field */
+  #user-input {
+    flex-grow: 1;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-right: 10px;
+    margin-left: 10px; /* Add some space to the left of the input */
+    font-size: 1em;
+  }
+  
+  /* Adjust margin for the send button */
+  .chat-input-area .chat-button {
+    margin-left: 10px; /* Add some space to the left of the button */
+  }
+  
+  /* Adjust margin for the document upload icon label */
+  .chat-input-area .document-upload {
+    margin-right: 10px; /* Add some space to the right of the icon */
+    margin-bottom: 0; /* Reset default margin-bottom from DocumentUpload */
+  }
+  
+  
+  /* You can add more media queries for different screen sizes as needed */
+  @media (min-width: 601px) and (max-width: 1024px) {
+    .chat-container {
+      width: 70%; /* Adjust width for tablets */
+      margin: 20px auto; /* Center on the screen */
+    }
+  }
+
+  @media (max-width: 600px) {
+    /* ... (existing mobile styles) ... */
+    .upload-notification {
+      margin: 8px;
+    }
+  }
+  
+  @media (min-width: 601px) and (max-width: 1024px) {
+    /* ... (existing tablet styles) ... */
+    .upload-notification {
+      margin: 0 20px 8px 20px;
+    }
+  }
