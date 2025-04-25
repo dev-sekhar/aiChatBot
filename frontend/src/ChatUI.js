@@ -1,5 +1,5 @@
 // src/ChatUI.js
-// This component orchestrates the chat interface, managing messages, input, and document display.
+// Manages the chat interface, handling messages, user input, document uploads, and interaction with the backend.
 import React, { useState, useRef, useEffect } from 'react';
 import './ChatUI.css';
 import ChatButton from './components/ChatButton';
@@ -7,37 +7,37 @@ import ChatInput from './components/ChatInput';
 import DocumentUpload from './components/DocumentUpload';
 
 const ChatUI = () => {
-  // State to manage the array of messages displayed in the chat.
+  // State to manage the array of messages displayed in the chat. Each message is an object with 'sender' and 'text' properties.
   const [messages, setMessages] = useState([
     { sender: 'user', text: 'Hello!' },
     { sender: 'assistant', text: 'Hi there! How can I help you today?' },
   ]);
 
-  // State to manage the text currently being typed by the user.
+  // State to manage the text currently being typed by the user in the input field.
   const [inputText, setInputText] = useState('');
 
-  // State to hold the content of the uploaded document (initially empty).
+  // State to hold the content of the uploaded document, which will be updated after backend processing.
   const [documentContent, setDocumentContent] = useState('');
 
-  // State to hold the message about the uploaded document.
+  // State to hold the message displayed to the user regarding the document upload status.
   const [uploadMessage, setUploadMessage] = useState('');
 
-  // useRef to create a reference to the chat history div for scrolling.
+  // useRef to create a reference to the chat history div. This allows us to programmatically scroll to the bottom.
   const chatHistoryRef = useRef(null);
 
-  // useEffect to scroll to the bottom of the chat history on new messages.
+  // useEffect hook to scroll to the bottom of the chat history whenever the 'messages' state updates.
   useEffect(() => {
     if (chatHistoryRef.current) {
       chatHistoryRef.current.scrollTop = chatHistoryRef.current.scrollHeight;
     }
   }, [messages]);
 
-  // Function to handle changes in the user input.
+  // Function to handle changes in the user input field. Updates the 'inputText' state.
   const handleInputChange = (event) => {
     setInputText(event.target.value);
   };
 
-  // Function to handle sending a new message.
+  // Function to handle sending a new message. It adds the user's message to the chat and simulates an AI response.
   const handleSendMessage = () => {
     const trimmedText = inputText.trim();
     if (trimmedText) {
@@ -48,29 +48,48 @@ const ChatUI = () => {
     }
   };
 
-  // Function to handle key press events in the input (for sending on Enter).
+  // Function to handle key press events in the input field. Sends a message when Enter is pressed without Shift.
   const handleKeyDown = (event) => {
     if (event.key === 'Enter' && !event.shiftKey) {
-      event.preventDefault();
+      event.preventDefault(); // Prevents a new line in the input field
       handleSendMessage();
     }
   };
 
-  // Function to handle file selection from the DocumentUpload component.
+  // Function to handle file selection from the DocumentUpload component. It reads the file and sends it to the backend.
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
       console.log("Selected file:", file.name);
       setUploadMessage(
-        `File uploaded: <span class="filename">${file.name}</span> - Content will be displayed here after processing.`
+        `File uploaded: <span class="filename">${file.name}</span> - Uploading...`
       );
-      // In a real application, you would send this file to the backend for processing
-      // and then update the 'documentContent' state with the processed text.
+
+      const formData = new FormData();
+      formData.append('document', file); // 'document' should match the backend's expected field name
+
+      fetch('http://localhost:5000/api/upload', { // Replace with your actual backend URL if different
+        method: 'POST',
+        body: formData,
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Upload successful:", data);
+          setUploadMessage(`File uploaded: <span class="filename">${data.filename}</span> - Successfully processed.`);
+          // In a real application, you would process the 'data' received from the backend here.
+          // For example, if the backend sends back the extracted text, you would update 'documentContent'.
+          // setDocumentContent(data.extractedText);
+        })
+        .catch((error) => {
+          console.error("Upload error:", error);
+          setUploadMessage(`Error uploading file: ${error.message}`);
+        });
     } else {
       setUploadMessage(""); // Clear the message if no file is selected
     }
   };
-  // Placeholder function to simulate AI response. Replace with actual API call.
+
+  // Placeholder function to simulate AI response based on user input. Replace with actual API calls to a language model.
   const simulateAIResponse = (userQuery) => {
     const thinkingMessage = { sender: 'assistant', text: 'Thinking...' };
     setMessages((prevMessages) => [...prevMessages, thinkingMessage]);
@@ -95,6 +114,7 @@ const ChatUI = () => {
 
   return (
     <div className="chat-container-wrapper">
+      {/* Conditionally render the document content area if 'documentContent' has data */}
       {documentContent && (
         <div className="document-column">
           <h3>Document Content</h3>
@@ -105,6 +125,7 @@ const ChatUI = () => {
         <div className="chat-header">
           <h2>AI Assistant</h2>
         </div>
+        {/* The chat history area, which scrolls to the bottom on new messages */}
         <div ref={chatHistoryRef} className="chat-history">
           {messages.map((message, index) => (
             <div key={index} className={`message ${message.sender}-message`}>
@@ -112,20 +133,25 @@ const ChatUI = () => {
             </div>
           ))}
         </div>
+        {/* Display the upload status message to the user */}
         {uploadMessage && (
           <div
             className="upload-notification"
             dangerouslySetInnerHTML={{ __html: uploadMessage }}
           />
         )}
+        {/* The input area for the user to interact with the chat */}
         <div className="chat-input-area">
+          {/* Component for handling document uploads */}
           <DocumentUpload onFileChange={handleFileChange} />
+          {/* Component for the text input field */}
           <ChatInput
             value={inputText}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             placeholder="Ask me anything..."
           />
+          {/* Button to send the user's message */}
           <ChatButton onClick={handleSendMessage}>Send</ChatButton>
         </div>
       </div>
